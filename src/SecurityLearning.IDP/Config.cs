@@ -69,6 +69,10 @@ namespace SecurityLearning.IDP
                     {
                         "https://localhost:44318/signin-oidc"
                     },
+                    PostLogoutRedirectUris = new List<string>
+                    {
+                        "https://localhost:44318/signout-callback-oidc"
+                    },
                     AllowedScopes =
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
