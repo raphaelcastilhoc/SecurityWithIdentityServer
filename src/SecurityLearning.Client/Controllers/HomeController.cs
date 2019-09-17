@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Authentication;
+﻿using IdentityModel.Client;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using SecurityLearning.Client.Models;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace SecurityLearning.Client.Controllers
@@ -11,9 +13,9 @@ namespace SecurityLearning.Client.Controllers
     [Authorize]
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            WriteOutIdentityInformation();
+            await WriteOutIdentityInformation();
             return View();
         }
 
@@ -51,6 +53,27 @@ namespace SecurityLearning.Client.Controllers
             {
                 Debug.WriteLine($"Claim type: {claim.Type} - Claim value: {claim.Value}");
             }
+        }
+
+        public async Task<string> GetAddress()
+        {
+            var discoveryClient = new DiscoveryClient("https://localhost:44359/");
+            var metaDataResponse = await discoveryClient.GetAsync();
+
+            var userInfoClient = new UserInfoClient(metaDataResponse.UserInfoEndpoint);
+
+            var accessToken = await HttpContext.GetTokenAsync(OpenIdConnectParameterNames.AccessToken);
+
+            var response = await userInfoClient.GetAsync(accessToken);
+
+            if (response.IsError)
+            {
+                throw response.Exception;
+            }
+
+            var address = response.Claims.FirstOrDefault(c => c.Type == "address")?.Value;
+
+            return address;
         }
     }
 }

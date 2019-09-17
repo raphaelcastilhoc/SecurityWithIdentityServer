@@ -22,10 +22,7 @@ namespace SecurityLearning.IDP
                     {
                         new Claim("given_name", "Frank"),
                         new Claim("family_name", "Underwood"),
-                        new Claim("address", "Main Road 1"),
-                        new Claim("role", "FreeUser"),
-                        new Claim("subscriptionlevel", "FreeUser"),
-                        new Claim("country", "nl")
+                        new Claim("address", "Main Road 1")
                     }
                 },
                 new TestUser
@@ -38,10 +35,7 @@ namespace SecurityLearning.IDP
                     {
                         new Claim("given_name", "Claire"),
                         new Claim("family_name", "Underwood"),
-                        new Claim("address", "Big Street 2"),
-                        new Claim("role", "PayingUser"),
-                        new Claim("subscriptionlevel", "PayingUser"),
-                        new Claim("country", "be")
+                        new Claim("address", "Big Street 2")
                     }
                 }
             };
@@ -52,7 +46,8 @@ namespace SecurityLearning.IDP
             return new List<IdentityResource>
             {
                 new IdentityResources.OpenId(),
-                new IdentityResources.Profile()
+                new IdentityResources.Profile(),
+                new IdentityResources.Address()
             };
         }
 
@@ -76,7 +71,8 @@ namespace SecurityLearning.IDP
                     AllowedScopes =
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
-                        IdentityServerConstants.StandardScopes.Profile
+                        IdentityServerConstants.StandardScopes.Profile,
+                        IdentityServerConstants.StandardScopes.Address
                     },
                     ClientSecrets =
                     {
