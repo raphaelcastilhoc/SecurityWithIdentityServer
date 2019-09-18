@@ -56,6 +56,7 @@ namespace SecurityLearning.Client
                   options.Scope.Add("profile");
                   options.Scope.Add("address");
                   options.Scope.Add("roles");
+                  options.Scope.Add("imagegalleryapi");
                   options.SaveTokens = true;
                   options.ClientSecret = "secret";
                   options.GetClaimsFromUserInfoEndpoint = true;

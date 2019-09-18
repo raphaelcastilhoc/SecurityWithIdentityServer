@@ -3,9 +3,13 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
+using Newtonsoft.Json;
 using SecurityLearning.Client.Models;
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace SecurityLearning.Client.Controllers
@@ -43,6 +47,25 @@ namespace SecurityLearning.Client.Controllers
 
             //Clear the identity cookie
             await HttpContext.SignOutAsync("oidc");
+        }
+
+        public async Task<IEnumerable<string>> GetValuesInApi()
+        {
+            var accessToken = await HttpContext.GetTokenAsync(OpenIdConnectParameterNames.AccessToken);
+
+            using (var httpClient = new HttpClient())
+            {
+                if (!string.IsNullOrEmpty(accessToken))
+                {
+                    httpClient.SetBearerToken(accessToken);
+                }
+
+                var response = await httpClient.GetAsync("https://localhost:44369/api/values");
+                var responseBody = await response.Content.ReadAsStringAsync();
+                var values = JsonConvert.DeserializeObject<IEnumerable<string>>(responseBody);
+
+                return values;
+            };
         }
 
         public async Task<string> GetAddress()

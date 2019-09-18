@@ -42,6 +42,7 @@ namespace SecurityLearning.IDP
                 }
             };
         }
+
         // identity-related resources (scopes)
         public static IEnumerable<IdentityResource> GetIdentityResources()
         {
@@ -55,6 +56,15 @@ namespace SecurityLearning.IDP
                     "Your role(s)",
                     new List<string>{ "role" })
             };
+        }
+
+        public static IEnumerable<ApiResource> GetApiResources()
+        {
+            return new List<ApiResource>
+            {
+                new ApiResource("imagegalleryapi", "Image Galery API")
+            };
+
         }
 
         public static IEnumerable<Client> GetClients()
@@ -79,7 +89,8 @@ namespace SecurityLearning.IDP
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
                         IdentityServerConstants.StandardScopes.Address,
-                        "roles"
+                        "roles",
+                        "imagegalleryapi"
                     },
                     ClientSecrets =
                     {

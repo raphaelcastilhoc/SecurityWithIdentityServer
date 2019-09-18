@@ -5,7 +5,9 @@ VisualStudioVersion = 16.0.29306.81
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SecurityLearning.IDP", "SecurityLearning.IDP\SecurityLearning.IDP.csproj", "{2817AE01-E1DC-4C73-AF8B-4CE8D29B4131}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SecurityLearning.Client", "SecurityLearning.Client\SecurityLearning.Client.csproj", "{A5340794-EEC8-4AEF-8298-71A5E2517B34}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SecurityLearning.Client", "SecurityLearning.Client\SecurityLearning.Client.csproj", "{A5340794-EEC8-4AEF-8298-71A5E2517B34}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SecurityLearning.API", "SecurityLearning.API\SecurityLearning.API.csproj", "{F8D2AD78-73AD-4651-81CD-42B14728025E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{A5340794-EEC8-4AEF-8298-71A5E2517B34}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A5340794-EEC8-4AEF-8298-71A5E2517B34}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A5340794-EEC8-4AEF-8298-71A5E2517B34}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F8D2AD78-73AD-4651-81CD-42B14728025E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F8D2AD78-73AD-4651-81CD-42B14728025E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F8D2AD78-73AD-4651-81CD-42B14728025E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F8D2AD78-73AD-4651-81CD-42B14728025E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
