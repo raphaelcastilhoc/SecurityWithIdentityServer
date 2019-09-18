@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using IdentityModel;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -53,9 +55,17 @@ namespace SecurityLearning.Client
                   options.Scope.Add("openid");
                   options.Scope.Add("profile");
                   options.Scope.Add("address");
+                  options.Scope.Add("roles");
                   options.SaveTokens = true;
                   options.ClientSecret = "secret";
                   options.GetClaimsFromUserInfoEndpoint = true;
+                  options.ClaimActions.MapUniqueJsonKey("role", "role");
+
+                  options.TokenValidationParameters = new TokenValidationParameters
+                  {
+                      NameClaimType = JwtClaimTypes.GivenName,
+                      RoleClaimType = JwtClaimTypes.Role
+                  };
               });
         }
 

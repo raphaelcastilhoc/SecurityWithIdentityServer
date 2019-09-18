@@ -11,5 +11,12 @@
         <li class="nav-item">
             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="GetAddress">GetAddress</a>
         </li>
+
+        @if (User.IsInRole("PayingUser"))
+        {
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="OnlyForPayingUser">Only visible for PayingUser</a>
+            </li>
+        }
     </ul>
 </div>

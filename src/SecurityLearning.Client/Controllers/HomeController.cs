@@ -30,6 +30,12 @@ namespace SecurityLearning.Client.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
+        [Authorize(Roles = "PayingUser")]
+        public IActionResult OnlyForPayingUser()
+        {
+            return View();
+        }
+
         public async Task Logout()
         {
             //Clear the local cookie ("Cookies" is the name of scheme)
@@ -37,22 +43,6 @@ namespace SecurityLearning.Client.Controllers
 
             //Clear the identity cookie
             await HttpContext.SignOutAsync("oidc");
-        }
-
-        public async Task WriteOutIdentityInformation()
-        {
-            // get the saved identity token
-            var identityToken = await HttpContext
-                .GetTokenAsync(OpenIdConnectParameterNames.IdToken);
-
-            // write it out
-            Debug.WriteLine($"Identity token: {identityToken}");
-
-            // write out the user claims
-            foreach (var claim in User.Claims)
-            {
-                Debug.WriteLine($"Claim type: {claim.Type} - Claim value: {claim.Value}");
-            }
         }
 
         public async Task<string> GetAddress()
@@ -74,6 +64,22 @@ namespace SecurityLearning.Client.Controllers
             var address = response.Claims.FirstOrDefault(c => c.Type == "address")?.Value;
 
             return address;
+        }
+
+        public async Task WriteOutIdentityInformation()
+        {
+            // get the saved identity token
+            var identityToken = await HttpContext
+                .GetTokenAsync(OpenIdConnectParameterNames.IdToken);
+
+            // write it out
+            Debug.WriteLine($"Identity token: {identityToken}");
+
+            // write out the user claims
+            foreach (var claim in User.Claims)
+            {
+                Debug.WriteLine($"Claim type: {claim.Type} - Claim value: {claim.Value}");
+            }
         }
     }
 }
