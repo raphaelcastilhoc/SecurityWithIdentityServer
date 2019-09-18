@@ -62,8 +62,11 @@ namespace SecurityLearning.IDP
         {
             return new List<ApiResource>
             {
-                new ApiResource("imagegalleryapi", "Image Galery API")
-            };
+                new ApiResource(
+                    "imagegalleryapi", "Image Galery API",
+                    new List<string> { "role" }
+                )
+        };
 
         }
 

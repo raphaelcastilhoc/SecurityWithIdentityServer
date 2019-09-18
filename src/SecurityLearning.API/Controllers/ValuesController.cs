@@ -12,7 +12,7 @@ namespace SecurityLearning.API.Controllers
     public class ValuesController : ControllerBase
     {
         // GET api/values
-        [Authorize]
+        [Authorize(Roles = "PayingUser")]
         [HttpGet]
         public ActionResult<IEnumerable<string>> Get()
         {
