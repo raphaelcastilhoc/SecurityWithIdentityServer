@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Newtonsoft.Json;
 using SecurityLearning.Client.Models;
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -51,6 +50,8 @@ namespace SecurityLearning.Client.Controllers
 
         public async Task<IEnumerable<string>> GetValuesInApi()
         {
+            var expiresAt = await HttpContext.GetTokenAsync("expires_at");
+
             var accessToken = await HttpContext.GetTokenAsync(OpenIdConnectParameterNames.AccessToken);
 
             using (var httpClient = new HttpClient())
@@ -87,6 +88,12 @@ namespace SecurityLearning.Client.Controllers
             var address = response.Claims.FirstOrDefault(c => c.Type == "address")?.Value;
 
             return address;
+        }
+
+        [Authorize(Policy = "CanGetCountries")]
+        public IEnumerable<string> GetCountries()
+        {
+            return new List<string> { "br", "usa", "af" };
         }
 
         public async Task WriteOutIdentityInformation()

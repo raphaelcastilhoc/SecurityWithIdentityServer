@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using IdentityModel;
+﻿using IdentityModel;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -37,6 +32,18 @@ namespace SecurityLearning.Client
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
+            services.AddAuthorization(authorizationOptions =>
+            {
+                authorizationOptions.AddPolicy(
+                    "CanGetCountries",
+                    policyBuilder =>
+                    {
+                        policyBuilder.RequireAuthenticatedUser();
+                        policyBuilder.RequireClaim("subscriptionlevel", "PayingUser");
+                        policyBuilder.RequireClaim("country", "be", "fr", "br");
+                    });
+            });
+
             services.AddAuthentication(options =>
             {
                 options.DefaultScheme = "Cookies";
@@ -56,11 +63,16 @@ namespace SecurityLearning.Client
                   options.Scope.Add("profile");
                   options.Scope.Add("address");
                   options.Scope.Add("roles");
+                  options.Scope.Add("subscriptionlevel");
+                  options.Scope.Add("country");
                   options.Scope.Add("imagegalleryapi");
+                  //options.Scope.Add("offline_access");
                   options.SaveTokens = true;
                   options.ClientSecret = "secret";
                   options.GetClaimsFromUserInfoEndpoint = true;
                   options.ClaimActions.MapUniqueJsonKey("role", "role");
+                  options.ClaimActions.MapUniqueJsonKey("subscriptionlevel", "subscriptionlevel");
+                  options.ClaimActions.MapUniqueJsonKey("country", "country");
 
                   options.TokenValidationParameters = new TokenValidationParameters
                   {

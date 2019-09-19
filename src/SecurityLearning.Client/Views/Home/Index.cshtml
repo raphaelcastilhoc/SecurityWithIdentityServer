@@ -1,4 +1,7 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
@@ -19,7 +22,18 @@
         @if (User.IsInRole("PayingUser"))
         {
             <li class="nav-item">
-                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="OnlyForPayingUser">Only visible for PayingUser</a>
+                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="OnlyForPayingUser">
+                    GetPayingUser (Only visible for PayingUser role)
+                </a>
+            </li>
+        }
+
+        @if ((await AuthorizationService.AuthorizeAsync(User, "CanGetCountries")).Succeeded)
+        {
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="GetCountries">
+                    GetCountries (Only visible if policy is allowed)
+                </a>
             </li>
         }
     </ul>
