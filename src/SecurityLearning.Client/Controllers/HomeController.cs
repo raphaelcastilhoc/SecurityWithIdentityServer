@@ -5,8 +5,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Newtonsoft.Json;
 using SecurityLearning.Client.Models;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -50,9 +52,19 @@ namespace SecurityLearning.Client.Controllers
 
         public async Task<IEnumerable<string>> GetValuesInApi()
         {
+            var accessToken = string.Empty;
+
             var expiresAt = await HttpContext.GetTokenAsync("expires_at");
 
-            var accessToken = await HttpContext.GetTokenAsync(OpenIdConnectParameterNames.AccessToken);
+            if (string.IsNullOrWhiteSpace(expiresAt)
+                || ((DateTime.Parse(expiresAt).AddSeconds(-60)).ToUniversalTime() < DateTime.UtcNow))
+            {
+                accessToken = await RenewTokens();
+            }
+            else
+            {
+                accessToken = await HttpContext.GetTokenAsync(OpenIdConnectParameterNames.AccessToken);
+            }
 
             using (var httpClient = new HttpClient())
             {
@@ -94,6 +106,73 @@ namespace SecurityLearning.Client.Controllers
         public IEnumerable<string> GetCountries()
         {
             return new List<string> { "br", "usa", "af" };
+        }
+
+        private async Task<string> RenewTokens()
+        {
+            // get the metadata
+            var discoveryClient = new DiscoveryClient("https://localhost:44359/");
+            var metaDataResponse = await discoveryClient.GetAsync();
+
+            // create a new token client to get new tokens
+            var tokenClient = new TokenClient(metaDataResponse.TokenEndpoint,
+                "imagegalleryclient", "secret");
+
+            // get the saved refresh token
+            var currentRefreshToken = await HttpContext
+                .GetTokenAsync(OpenIdConnectParameterNames.RefreshToken);
+
+            // refresh the tokens
+            var tokenResult = await tokenClient.RequestRefreshTokenAsync(currentRefreshToken);
+
+            if (!tokenResult.IsError)
+            {
+                // update the tokens & exipration value
+                var updatedTokens = new List<AuthenticationToken>();
+                updatedTokens.Add(new AuthenticationToken
+                {
+                    Name = OpenIdConnectParameterNames.IdToken,
+                    Value = tokenResult.IdentityToken
+                });
+                updatedTokens.Add(new AuthenticationToken
+                {
+                    Name = OpenIdConnectParameterNames.AccessToken,
+                    Value = tokenResult.AccessToken
+                });
+                updatedTokens.Add(new AuthenticationToken
+                {
+                    Name = OpenIdConnectParameterNames.RefreshToken,
+                    Value = tokenResult.RefreshToken
+                });
+
+                var expiresAt = DateTime.UtcNow + TimeSpan.FromSeconds(tokenResult.ExpiresIn);
+                updatedTokens.Add(new AuthenticationToken
+                {
+                    Name = "expires_at",
+                    Value = expiresAt.ToString("o", CultureInfo.InvariantCulture)
+                });
+
+                // get authenticate result, containing the current principal & 
+                // properties
+                var currentAuthenticateResult = await HttpContext.AuthenticateAsync("Cookies");
+
+                // store the updated tokens
+                currentAuthenticateResult.Properties.StoreTokens(updatedTokens);
+
+                // sign in
+                await HttpContext.SignInAsync("Cookies",
+                    currentAuthenticateResult.Principal,
+                    currentAuthenticateResult.Properties);
+
+                // return the new access token 
+                return tokenResult.AccessToken;
+            }
+            else
+            {
+
+                throw new Exception("Problem encountered while refreshing tokens.",
+                    tokenResult.Exception);
+            }
         }
 
         public async Task WriteOutIdentityInformation()

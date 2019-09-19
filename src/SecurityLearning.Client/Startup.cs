@@ -29,7 +29,6 @@ namespace SecurityLearning.Client
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddAuthorization(authorizationOptions =>
@@ -66,7 +65,7 @@ namespace SecurityLearning.Client
                   options.Scope.Add("subscriptionlevel");
                   options.Scope.Add("country");
                   options.Scope.Add("imagegalleryapi");
-                  //options.Scope.Add("offline_access");
+                  options.Scope.Add("offline_access");
                   options.SaveTokens = true;
                   options.ClientSecret = "secret";
                   options.GetClaimsFromUserInfoEndpoint = true;
