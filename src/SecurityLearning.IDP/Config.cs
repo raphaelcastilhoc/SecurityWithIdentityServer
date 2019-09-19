@@ -75,7 +75,7 @@ namespace SecurityLearning.IDP
             return new List<ApiResource>
             {
                 new ApiResource(
-                    "imagegalleryapi", "Image Galery API",
+                    "securitylearningapi", "Security Learning API",
                     new List<string> { "role" }
                 )
         };
@@ -88,8 +88,8 @@ namespace SecurityLearning.IDP
             {
                 new Client
                 {
-                    ClientName = "Image Gallery",
-                    ClientId = "imagegalleryclient",
+                    ClientName = "Security Learning",
+                    ClientId = "securitylearningclient",
                     AllowedGrantTypes = GrantTypes.Hybrid,
                     AccessTokenLifetime = 120,
                     AllowOfflineAccess = true,
@@ -108,7 +108,7 @@ namespace SecurityLearning.IDP
                         IdentityServerConstants.StandardScopes.Profile,
                         IdentityServerConstants.StandardScopes.Address,
                         "roles",
-                        "imagegalleryapi",
+                        "securitylearningapi",
                         "country",
                         "subscriptionlevel"
                     },

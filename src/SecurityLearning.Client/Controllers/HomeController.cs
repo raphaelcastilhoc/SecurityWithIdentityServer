@@ -116,7 +116,7 @@ namespace SecurityLearning.Client.Controllers
 
             // create a new token client to get new tokens
             var tokenClient = new TokenClient(metaDataResponse.TokenEndpoint,
-                "imagegalleryclient", "secret");
+                "securitylearningclient", "secret");
 
             // get the saved refresh token
             var currentRefreshToken = await HttpContext

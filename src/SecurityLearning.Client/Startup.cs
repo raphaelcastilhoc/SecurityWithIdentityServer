@@ -56,7 +56,7 @@ namespace SecurityLearning.Client
               {
                   options.SignInScheme = "Cookies";
                   options.Authority = "https://localhost:44359/";
-                  options.ClientId = "imagegalleryclient";
+                  options.ClientId = "securitylearningclient";
                   options.ResponseType = "code id_token";
                   options.Scope.Add("openid");
                   options.Scope.Add("profile");
@@ -64,7 +64,7 @@ namespace SecurityLearning.Client
                   options.Scope.Add("roles");
                   options.Scope.Add("subscriptionlevel");
                   options.Scope.Add("country");
-                  options.Scope.Add("imagegalleryapi");
+                  options.Scope.Add("securitylearningapi");
                   options.Scope.Add("offline_access");
                   options.SaveTokens = true;
                   options.ClientSecret = "secret";

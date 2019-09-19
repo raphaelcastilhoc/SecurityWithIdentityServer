@@ -26,7 +26,7 @@ namespace SecurityLearning.API
                 .AddIdentityServerAuthentication(options =>
                 {
                     options.Authority = "https://localhost:44359/";
-                    options.ApiName = "imagegalleryapi";
+                    options.ApiName = "securitylearningapi";
                 });
         }
 
